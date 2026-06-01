@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="images/logo.png" width="800" alt="StreamXOne Logo Banner" />
+  <img src="images/logo.png" width="150" alt="StreamXOne Logo Banner" />
   <h2>StreamXOne</h2>
   <p>Your ultimate streaming platform, powered by RexD.</p>
   <a href="https://streamx.rexd.space/">Visit <strong>StreamXOne</strong></a> | <a href="https://github.com/PranavSagarXD/"><em>Pranav Sagar</em></a>
