@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StreamX - A modern streaming experience for curated content.</title>
+  <link rel="icon" type="image/png" href="images/favicon.png">
+
+  <!-- FONT -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- ================= HEADER ================= -->
+<header class="header">
+
+  <div class="logo-wrap" onclick="location.href='index.html'">
+    <img src="images/logo.png" alt="logo" class="logo-img">
+    <span class="logo-text">StreamX</span>
+  </div>
+
+  <nav class="nav" id="navMenu">
+    <a href="#">Home</a>
+    <a href="https://dub.sh/StreamDock/">StreamDock</a>
+    <a href="https://dub.sh/AuroraWeb/">Aurora</a>
+    <a href="https://dub.sh/HeartWeb/">Heart</a>
+  </nav>
+
+  <div class="right">
+    <input type="text" id="search" placeholder="Search...&...Scroll">
+  </div>
+
+  <div class="menu-toggle" id="menuToggle">☰</div>
+
+</header>
+
+<!-- ================= HERO ================= -->
+<section class="hero">
+
+  <div class="hero-content">
+    <h2 id="heroTitle">Loading...</h2>
+    <p id="heroDesc"></p>
+    <button id="heroBtn">▶ Watch Now</button>
+  </div>
+
+  <div class="hero-controls">
+    <button id="prevBtn">‹</button>
+    <button id="nextBtn">›</button>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress"></div>
+  </div>
+
+</section>
+
+<!-- ================= MAIN CONTENT ================= -->
+<main id="content"></main>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+
+  <div class="footer-inner">
+
+    <div class="footer-brand">
+
+      <div class="logo-wrap">
+        <img src="images/logo.png" class="logo-img">
+        <span class="logo-text">StreamX</span>
+      </div>
+
+      <p class="footer-desc">
+        <strong>A modern streaming experience for curated content.</strong> <br>_____________________<br> <br>PLEASE! Before Clicking any Video content<br>
+                Use 
+                <a href="https://brave.com/" class="standard-link" target="_blank">
+                     Brave Browser
+                </a> 
+                or 
+                <a href="https://ublockorigin.com/" class="standard-link" target="_blank">
+                     Ublockorigin Extension
+                </a> 
+                to stop all unwanted popups and ads!<br>
+      </p>
+
+      <div class="socials">
+        <a href="https://github.com/PranavSagarXd/"><img src="images/git.png"><span>GitHub</span></a>
+        <a href="https://dub.sh/HeartWeb"><img src="images/heart.png"><span>Heart</span></a>
+        <a href="https://dub.sh/AuroraWeb/"><img src="images/Aurora.svg"><span>Aurora</span></a>
+      </div>
+
+    </div>
+
+    <div class="footer-columns">
+
+      <div class="col">
+        <h4>Browse</h4>
+        <a href="#">Home</a>
+        <a href="/video.html?id=mh1">Money Heist</a>
+        <a href="/video.html?id=s1">India's Got Latent</a>
+      </div>
+
+      <div class="col">
+        <h4>Company</h4>
+        <a href="https://dub.sh/HeartWeb/">About</a>
+        <a href="mailto:rexd@tuta.io">Contact</a>
+        <a href="https://streamdock.great-site.net/dmca.html/">DMCA</a>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    © 2026 StreamX  - Pranav Sagar ✦
+  </div>
+
+</footer>
+
+<!-- ================= SCRIPTS ================= -->
+<script src="data.js"></script>
+<script src="script.js"></script>
+
+<!-- MOBILE MENU (SAFE - NO DUPLICATES) -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const toggle = document.getElementById("menuToggle");
+  const nav = document.getElementById("navMenu");
+
+  if (toggle && nav) {
+    toggle.onclick = () => nav.classList.toggle("active");
+  }
+});
+</script>
+
+</body>
+</html>

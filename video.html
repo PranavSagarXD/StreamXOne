@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Watch - StreamX</title>
+  <link rel="icon" type="image/png" href="images/favicon.png">
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- ================= HEADER ================= -->
+<header class="header">
+
+  <div class="logo-wrap" onclick="location.href='index.html'">
+    <img src="images/logo.png" class="logo-img">
+    <span class="logo-text">StreamX</span>
+  </div>
+
+  <nav class="nav" id="navMenu">
+    <a href="index.html">Home</a>
+    <a href="https://dub.sh/StreamDock/">StreamDock</a>
+    <a href="https://dub.sh/AuroraWeb/">Aurora</a>
+    <a href="https://dub.sh/HeartWeb/">Heart</a>
+  </nav>
+
+  <div class="right">
+    <input type="text" placeholder="Search..." disabled>
+  </div>
+
+  <div class="menu-toggle" id="menuToggle">☰</div>
+
+</header>
+
+<!-- ================= MAIN ================= -->
+<main class="player-page">
+
+  <!-- TITLE -->
+  <h1 id="videoTitle"></h1>
+
+  <!-- VIDEO PLAYER -->
+  <div class="video-container">
+    <iframe 
+      id="videoPlayer"
+      src=""
+      frameborder="0"
+      scrolling="0"
+      allowfullscreen>
+    </iframe>
+  </div>
+
+  <!-- DESCRIPTION -->
+  <p id="videoDesc"></p>
+
+  <!-- ================= EPISODES (DYNAMIC) ================= -->
+  <section id="episodesSection"></section>
+
+  <!-- ================= RELATED ================= -->
+  <section class="related-section">
+    <h2>More Like This</h2>
+    <div class="row" id="relatedRow"></div>
+  </section>
+
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+
+  <div class="footer-inner">
+
+    <div class="footer-brand">
+
+      <div class="logo-wrap">
+        <img src="images/logo.png" class="logo-img">
+        <span class="logo-text">StreamX</span>
+      </div>
+
+      <p class="footer-desc">
+        A modern streaming experience for curated content.
+      </p>
+
+      <div class="socials">
+        <a href="https://github.com/PranavSagarXd/"><img src="images/git.png"><span>GitHub</span></a>
+        <a href="https://dub.sh/HeartWeb"><img src="images/heart.png"><span>Heart</span></a>
+        <a href="https://dub.sh/AuroraWeb/"><img src="images/Aurora.svg"><span>Aurora</span></a>
+      </div>
+
+    </div>
+
+    <div class="footer-columns">
+
+      <div class="col">
+        <h4>Browse</h4>
+        <a href="/index.html">Home</a>
+        <a href="/video.html?id=mh1">Money Heist</a>
+        <a href="/video.html?id=s1">India's Got Latent</a>
+      </div>
+
+      <div class="col">
+        <h4>Company</h4>
+        <a href="https://dub.sh/HeartWeb/">About</a>
+        <a href="mailto:rexd@tuta.io">Contact</a>
+        <a href="https://streamdock.great-site.net/dmca.html/">DMCA</a>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    © 2026 StreamX  - Pranav Sagar ✦
+  </div>
+
+</footer>
+
+<!-- ================= SCRIPTS ================= -->
+<script src="data.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  // ================= MOBILE MENU =================
+  const toggle = document.getElementById("menuToggle");
+  const nav = document.getElementById("navMenu");
+
+  if (toggle && nav) {
+    toggle.onclick = () => nav.classList.toggle("active");
+  }
+
+  // ================= ELEMENTS =================
+  const params = new URLSearchParams(window.location.search);
+  const videoId = params.get("id");
+  const episodeId = params.get("e");
+
+  const titleEl = document.getElementById("videoTitle");
+  const descEl = document.getElementById("videoDesc");
+  const player = document.getElementById("videoPlayer");
+  const episodesSection = document.getElementById("episodesSection");
+  const relatedRow = document.getElementById("relatedRow");
+
+  // ================= VALIDATION =================
+  if (!videoId) {
+    titleEl.textContent = "No video selected";
+    return;
+  }
+
+  const video = videos.find(v => String(v.id) === String(videoId));
+
+  if (!video) {
+    titleEl.textContent = "Video not found";
+    return;
+  }
+
+  // ================= MOVIE =================
+  if (video.type === "movie" || !video.episodes) {
+
+    titleEl.textContent = video.title;
+    descEl.textContent = video.description;
+    player.src = video.embed;
+    saveWatchHistory(video.id);
+
+  }
+
+  // ================= SERIES =================
+  else if (video.type === "series") {
+
+    const episodes = video.episodes;
+
+    let currentEpisode = episodes[0];
+
+    if (episodeId) {
+      const found = episodes.find(ep => ep.id === episodeId);
+      if (found) currentEpisode = found;
+    }
+
+    // title
+    titleEl.textContent = `${video.title} - ${currentEpisode.title}`;
+    descEl.textContent = video.description;
+
+    // play episode
+    player.src = currentEpisode.embed;
+    saveWatchHistory(video.id);
+
+    // ================= EPISODES UI =================
+    renderEpisodes(video, currentEpisode);
+
+    // ================= AUTOPLAY NEXT =================
+    setupAutoplay(video, currentEpisode);
+  }
+
+  // ================= RELATED =================
+  if (relatedRow) {
+    videos.forEach(v => {
+      if (String(v.id) === String(videoId)) return;
+
+      const card = document.createElement("div");
+      card.className = "card";
+
+      const img = document.createElement("img");
+      img.src = v.thumbnail;
+
+      const title = document.createElement("p");
+      title.textContent = v.title;
+
+      card.appendChild(img);
+      card.appendChild(title);
+
+      card.onclick = () => {
+        location.href = `video.html?id=${v.id}`;
+      };
+
+      relatedRow.appendChild(card);
+    });
+  }
+
+  // ================= FUNCTIONS =================
+
+  function renderEpisodes(series, currentEpisode) {
+    if (!episodesSection) return;
+
+    episodesSection.innerHTML = "";
+
+    const section = document.createElement("div");
+    section.className = "episodes-section";
+
+    const title = document.createElement("h2");
+    title.textContent = "Episodes";
+
+    const grid = document.createElement("div");
+    grid.className = "episodes-grid";
+
+    series.episodes.forEach(ep => {
+
+      const btn = document.createElement("div");
+      btn.className = "episode-card";
+
+      if (ep.id === currentEpisode.id) {
+        btn.classList.add("active");
+      }
+
+      btn.textContent = ep.title;
+
+      btn.onclick = () => {
+        location.href = `video.html?id=${series.id}&e=${ep.id}`;
+      };
+
+      grid.appendChild(btn);
+    });
+
+    section.appendChild(title);
+    section.appendChild(grid);
+    episodesSection.appendChild(section);
+  }
+
+  function setupAutoplay(series, currentEpisode) {
+    const index = series.episodes.findIndex(e => e.id === currentEpisode.id);
+
+    player.onended = () => {
+      const next = series.episodes[index + 1];
+
+      if (next) {
+        location.href = `video.html?id=${series.id}&e=${next.id}`;
+      }
+    };
+  }
+  // ================= SAVE WATCH HISTORY =================
+function saveWatchHistory(videoId) {
+  let history = JSON.parse(localStorage.getItem("watch")) || [];
+
+  history = history.filter(id => id !== videoId);
+  history.unshift(videoId);
+
+  history = history.slice(0, 10);
+
+  localStorage.setItem("watch", JSON.stringify(history));
+}
+
+});
+</script>
+
+</body>
+</html>
